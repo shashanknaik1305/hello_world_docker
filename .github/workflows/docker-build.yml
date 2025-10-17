@@ -39,6 +39,12 @@ jobs:
               docker stop hello_world_docker
               docker rm hello_world_docker
             fi
+            
+            PORT_CONTAINER=$(docker ps -q -f publish=80)
+             if [ ! -z "$PORT_CONTAINER" ]; then
+             docker stop $PORT_CONTAINER
+              docker rm $PORT_CONTAINER
+             fi
             docker run -d --name hello_world_docker -p 80:5000 ${{ secrets.DOCKERHUB_USERNAME }}/hello_world_docker:latest
 
 
