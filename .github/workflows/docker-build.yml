@@ -35,10 +35,10 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/hello_world_docker:latest
-            if [ $(docker ps -q -f name=hello_world_docker) ]; then
-              docker stop hello_world_docker
-              docker rm hello_world_docker
-            fi
+            EXISTING=$(docker ps -a -q -f name=hello_world_docker)
+            if [ ! -z "$EXISTING" ]; then
+             docker rm -f hello_world_docker
+           fi
             
             PORT_CONTAINER=$(docker ps -q -f publish=80)
              if [ ! -z "$PORT_CONTAINER" ]; then
