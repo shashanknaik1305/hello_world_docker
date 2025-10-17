@@ -16,16 +16,16 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/hello_world_docker:latest ./backend
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/hello_world_docker:latest ./backend
 
       - name: Push Docker image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/hello_world_docker:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/hello_world_docker:latest
 
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.6
@@ -34,11 +34,11 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/hello_world_docker:latest
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/hello_world_docker:latest
             if [ $(docker ps -q -f name=hello_world_docker) ]; then
               docker stop hello_world_docker
               docker rm hello_world_docker
             fi
-            docker run -d --name hello_world_docker -p 80:5000 ${{ secrets.DOCKER_USERNAME }}/hello_world_docker:latest
+            docker run -d --name hello_world_docker -p 80:5000 ${{ secrets.DOCKERHUB_USERNAME }}/hello_world_docker:latest
 
 
