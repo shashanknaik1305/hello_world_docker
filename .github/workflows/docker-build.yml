@@ -20,7 +20,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker image
-        run: docker build -t shashanknaik1308/hello_world_docker:1.0 ./backend
+        run: docker build -t shashanknaik1308/hello_world_docker:latest ./backend
 
       - name: Push Docker image
-        run: docker push shashanknaik1308/hello_world_docker:1.0
+        run: docker push shashanknaik1308/hello_world_docker:latest
+
